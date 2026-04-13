@@ -60,10 +60,11 @@ ROOT_URLCONF = 'fraud_prevent.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')], # 이 부분을 수정!
-        'APP_DIRS': True,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')], # templates 폴더 위치 지정
+        'APP_DIRS': True, # 앱 안의 templates 폴더도 읽도록 True 유지
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
