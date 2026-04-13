@@ -32,7 +32,6 @@ CSRF_TRUSTED_ORIGINS = [
     'https://junboweb.onrender.com',
 ]
 
-
 # Application definition
 
 INSTALLED_APPS = [
