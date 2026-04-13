@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import FraudCase
-import re # 숫자만 추출하기 위해 추가
+import re  # <-- 이 줄이 반드시 맨 위에 있어야 합니다!
 
 def index(request):
     search_result = None
@@ -8,15 +8,14 @@ def index(request):
 
     if request.method == "POST":
         raw_query = request.POST.get("search_query", "").strip()
-        # 1. 사용자가 입력한 값에서 숫자만 추출 (하이픈, 공백 제거)
+        # 숫자만 추출
         query = re.sub(r'[^0-9]', '', raw_query) 
         
         if query:
-            # 2. DB에 있는 모든 데이터를 가져와서 숫자만 남긴 뒤 비교
-            # (데이터가 아주 많지 않을 때 가장 확실한 방법입니다)
+            # 승인된 데이터만 가져오기
             all_cases = FraudCase.objects.filter(is_approved=True)
             for case in all_cases:
-                # DB 저장값에서도 숫자만 추출
+                # DB 데이터에서도 숫자만 추출해서 비교
                 db_info_cleaned = re.sub(r'[^0-9]', '', case.fraud_info)
                 if db_info_cleaned == query:
                     search_result = case
@@ -27,5 +26,5 @@ def index(request):
 
     return render(request, 'checker/index.html', {
         'search_result': search_result,
-        'query': raw_query # 화면에는 사용자가 입력한 그대로 보여줌
+        'query': raw_query
     })
