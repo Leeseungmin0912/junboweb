@@ -1,6 +1,4 @@
-오타가 발생한 부분과 중복된 설정을 정리한 settings.py 전체 코드입니다. 이 내용을 그대로 복사해서 기존 파일의 내용을 모두 지우고 덮어쓰기 하시면 됩니다.
 
-Python
 """
 Django settings for fraud_prevent project.
 
