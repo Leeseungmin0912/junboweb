@@ -24,7 +24,7 @@ def index(request):
             if not search_result:
                 search_result = "no_result"
 
-    return render(request, 'index.html', {
+    return render(request, 'checker/index.html', {
         'search_result': search_result,
         'query': raw_query
     })
