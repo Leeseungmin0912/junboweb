@@ -21,15 +21,11 @@
         </form>
     </div>
 
-    {% if results %}
-        <div style="color: red; font-weight: bold;">
-            ⚠️ 주의! 피해 사례가 존재합니다.
-        </div>
-    {% elif results is not None %}
-        <div style="color: green;">
-            ✅ 깨끗한 정보입니다. (피해 사례 없음)
-        </div>
-    {% endif %}
+{% if search_result == "no_result" %}
+    <p style="color: blue;">조회된 피해 사례가 없습니다. 안심하셔도 좋습니다.</p>
+{% elif search_result %}
+    <p style="color: red; font-weight: bold;">⚠️ 주의! 피해 사례가 존재합니다.</p>
+    
 <h3>사기 피해 사례 제보하기</h3>
 <form method="post">
     {% csrf_token %}
