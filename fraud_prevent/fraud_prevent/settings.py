@@ -19,7 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-px+pca#62j1gwlo1b8f1b!ipu3#n$-$09e!iq6r=g!b8+)$#9r'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     'junboweb.onrender.com',
@@ -60,8 +60,9 @@ ROOT_URLCONF = 'fraud_prevent.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],  # 이 부분을 비워두세요!
-        'APP_DIRS': True, # True면 각 앱(checker) 폴더 안의 templates를 자동으로 찾습니다.
+        # DIRS를 비우면 각 앱(checker) 폴더 내의 templates를 자동으로 찾습니다.
+        'DIRS': [], 
+        'APP_DIRS': True, 
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
