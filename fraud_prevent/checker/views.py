@@ -1,17 +1,25 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import FraudCase
-import re
 
 
 def index(request):
-    results = None
-    if request.method == 'POST':
-        query = request.POST.get('query')
+    search_result = None
 
-        # 정규표현식을 사용하여 숫자만 남기고 모든 특수문자(하이픈 등) 제거
-        clean_query = re.sub(r'[^0-9]', '', query)
+    if request.method == "POST":
+        # 1. 사용자가 '조회'를 한 경우
+        if "search_query" in request.POST:
+            query = request.POST.get("search_query")
+            # '승인된(is_approved=True)' 데이터 중에서만 검색함
+            search_result = FraudCase.objects.filter(fraud_info=query, is_approved=True).first()
 
-        # DB에서도 하이픈이 제거된 상태로 저장되어 있다면 아래와 같이 검색
-        results = FraudCase.objects.filter(target_info=clean_query)
+        # 2. 사용자가 사기 사례를 '등록' 요청한 경우
+        elif "fraud_info" in request.POST:
+            FraudCase.objects.create(
+                fraud_type=request.POST.get("fraud_type"),
+                fraud_info=request.POST.get("fraud_info"),
+                description=request.POST.get("description"),
+                is_approved=False  # 사용자가 등록하면 자동으로 '미승인' 상태
+            )
+            return render(request, 'checker/index.html', {'message': '등록 요청이 완료되었습니다. 관리자 검토 후 반영됩니다.'})
 
-    return render(request, 'checker/index.html', {'results': results})
+    return render(request, 'checker/index.html', {'search_result': search_result})

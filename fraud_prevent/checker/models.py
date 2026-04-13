@@ -1,17 +1,15 @@
-import re
 from django.db import models
 
+
 class FraudCase(models.Model):
-    category = models.CharField(max_length=50, verbose_name="사기 유형")
-    target_info = models.CharField(max_length=100, verbose_name="사기 의심 정보")
-    description = models.TextField(verbose_name="피해 상세 내용")
+    # 기존 필드들
+    fraud_type = models.CharField(max_length=50)
+    fraud_info = models.CharField(max_length=100)
+    description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
-    # 데이터를 저장(save)하기 직전에 하이픈을 제거하는 로직 추가
-    def save(self, *args, **kwargs):
-        # 숫자만 남기고 저장
-        self.target_info = re.sub(r'[^0-9]', '', self.target_info)
-        super().save(*args, **kwargs)
+    # 승인 여부 필드 추가 (기본값은 False로 설정하여 검토 대기 상태로 만듦)
+    is_approved = models.BooleanField(default=False, verbose_name="승인 여부")
 
     def __str__(self):
-        return f"[{self.category}] {self.target_info}"
+        return f"[{'승인' if self.is_approved else '대기'}] {self.fraud_info}"
