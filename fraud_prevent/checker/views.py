@@ -1,27 +1,33 @@
 from django.shortcuts import render
 from .models import FraudCase
-import re  # <-- 이 줄이 반드시 맨 위에 있어야 합니다!
+import re
 
 def index(request):
     search_result = None
-    query = None
+    raw_query = ""
 
     if request.method == "POST":
+        # 사용자가 입력한 값 가져오기
         raw_query = request.POST.get("search_query", "").strip()
-        # 숫자만 추출
-        query = re.sub(r'[^0-9]', '', raw_query) 
         
-        if query:
-            # 승인된 데이터만 가져오기
+        # 입력값에서 숫자만 추출 (예: 010-1234 -> 0101234)
+        clean_query = re.sub(r'[^0-9]', '', raw_query)
+        
+        if clean_query:
+            # 승인된 모든 데이터를 가져와서 비교
             all_cases = FraudCase.objects.filter(is_approved=True)
+            
             for case in all_cases:
-                # DB 데이터에서도 숫자만 추출해서 비교
-                db_info_cleaned = re.sub(r'[^0-9]', '', case.fraud_info)
-                if db_info_cleaned == query:
+                # DB의 fraud_info가 None일 경우를 대비해 빈 문자열 처리
+                db_info = case.fraud_info if case.fraud_info else ""
+                clean_db_info = re.sub(r'[^0-9]', '', db_info)
+                
+                if clean_db_info == clean_query:
                     search_result = case
                     break
             
-            if not search_result:
+            # 검색 결과가 없으면 'no_result' 문자열 전달
+            if search_result is None:
                 search_result = "no_result"
 
     return render(request, 'checker/index.html', {
