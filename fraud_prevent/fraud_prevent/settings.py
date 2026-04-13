@@ -60,7 +60,7 @@ ROOT_URLCONF = 'fraud_prevent.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')], # 이 부분을 수정!
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
