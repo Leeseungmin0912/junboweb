@@ -27,6 +27,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://junboweb.onrender.com',
+]
+
 
 # Application definition
 
@@ -118,7 +122,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-# Default primary key field type
+# Default primary keyALLOWED_HOSTS field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
