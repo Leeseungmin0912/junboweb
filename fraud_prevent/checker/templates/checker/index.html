@@ -1,38 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>사기 방지 플랫폼 - Checker</title>
     <style>
-        body { font-family: sans-serif; text-align: center; padding-top: 50px; }
-        .search-box { margin-bottom: 20px; }
-        input { padding: 10px; width: 300px; }
-        button { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; }
+        body { font-family: 'Malgun Gothic', sans-serif; text-align: center; padding-top: 50px; background-color: #f8f9fa; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { color: #333; }
+        .search-box { margin: 20px 0; }
+        input { padding: 12px; width: 70%; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; }
+        button { padding: 12px 25px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #0056b3; }
+        .result-container { margin-top: 30px; }
+        hr { margin: 30px 0; border: 0; border-top: 1px solid #eee; }
     </style>
 </head>
 <body>
-    <h1>🛡️ 사기 피해 방지 조회</h1>
-    <p>상대방의 계좌번호나 전화번호를 입력하여 피해 사례를 확인하세요.</p>
+    <div class="container">
+        <h1>🛡️ 사기 피해 방지 조회</h1>
+        <p>상대방의 계좌번호나 전화번호를 입력하여 피해 사례를 확인하세요.</p>
 
-    <div class="search-box">
-        <form method="POST">
-            {% csrf_token %}
-            <input type="text" name="query" placeholder="번호 또는 계좌 입력...">
-            <button type="submit">조회하기</button>
-        </form>
+        <div class="search-box">
+            <form method="POST">
+                {% csrf_token %}
+                <input type="text" name="search_query" value="{{ query|default:'' }}" placeholder="번호 또는 계좌 입력..." required>
+                <button type="submit">조회하기</button>
+            </form>
+        </div>
+
+        <div class="result-container">
+            {% if search_result == "no_result" %}
+                <div style="padding: 20px; background-color: #e3f2fd; border-radius: 10px;">
+                    <p style="color: #0d47a1; font-weight: bold; font-size: 18px;">✅ 조회 결과: 안전합니다.</p>
+                    <p>"<strong>{{ query }}</strong>" 번호에 대해 등록된 피해 사례가 없습니다.</p>
+                </div>
+            {% elif search_result %}
+                <div style="padding: 20px; background-color: #ffebee; border-radius: 10px; border: 2px solid #ef9a9a;">
+                    <p style="color: #b71c1c; font-weight: bold; font-size: 18px;">⚠️ 주의! 피해 사례가 존재합니다.</p>
+                    <p><strong>조회 번호:</strong> {{ query }}</p>
+                    <p><strong>사기 유형:</strong> {{ search_result.fraud_type }}</p>
+                    <p><strong>상세 내용:</strong> {{ search_result.description }}</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <hr>
+        <p style="font-size: 14px; color: #666;">
+            피해를 입으셨나요? <a href="/admin/" style="color: #007bff;">관리자 페이지</a>에서 사례를 등록해주세요.
+        </p>
     </div>
-
-{% if search_result == "no_result" %}
-    <p style="color: blue;">조회된 피해 사례가 없습니다. 안심하셔도 좋습니다.</p>
-{% elif search_result %}
-    <p style="color: red; font-weight: bold;">⚠️ 주의! 피해 사례가 존재합니다.</p>
-    
-<h3>사기 피해 사례 제보하기</h3>
-<form method="post">
-    {% csrf_token %}
-    <input type="text" name="fraud_type" placeholder="사기 유형 (예: 중고거래)" required><br>
-    <input type="text" name="fraud_info" placeholder="연락처 또는 계좌번호" required><br>
-    <textarea name="description" placeholder="상세 피해 내용" required></textarea><br>
-    <button type="submit">등록 요청하기</button>
-</form>
 </body>
 </html>
