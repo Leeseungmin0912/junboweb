@@ -1,36 +1,68 @@
-{% if message %}
-    <script>alert("{{ message }}");</script>
-{% endif %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>사기 피해 방지 플랫폼</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f8f9fa; padding: 20px; text-align: center; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .box { border: 1px solid #eee; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+        input, select, textarea { width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; }
+        button { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; color: white; font-weight: bold; }
+        .btn-search { background-color: #007bff; }
+        .btn-report { background-color: #28a745; }
+        .safe { color: #0d47a1; background: #e3f2fd; padding: 15px; border-radius: 10px; }
+        .danger { color: #b71c1c; background: #ffebee; padding: 15px; border-radius: 10px; border: 1px solid #f44336; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛡️ 사기 피해 조회 & 제보</h1>
 
-<div class="container">
-    <h1>🛡️ 사기 피해 방지 플랫폼</h1>
-    
-    <div class="section">
-        <h3>🔍 피해 사례 조회</h3>
-        <form method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="action_type" value="search">
-            <input type="text" name="search_query" value="{{ query|default:'' }}" placeholder="조회할 번호/계좌 입력...">
-            <button type="submit">조회하기</button>
-        </form>
+        {% if message %}<script>alert("{{ message }}");</script>{% endif %}
+
+        <div class="box">
+            <h3>🔍 사례 조회하기</h3>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="action_type" value="search">
+                <input type="text" name="search_query" value="{{ query }}" placeholder="조회할 번호 또는 계좌 입력">
+                <button type="submit" class="btn-search">조회하기</button>
+            </form>
+
+            {% if search_result %}
+                <div style="margin-top: 20px;">
+                {% if search_result == "no_result" %}
+                    <div class="safe">✅ <b>안전:</b> 등록된 피해 사례가 없습니다.</div>
+                {% else %}
+                    <div class="danger">
+                        ⚠️ <b>위험:</b> 피해 사례가 존재합니다!<br>
+                        유형: {{ search_result.fraud_type }}<br>
+                        내용: {{ search_result.description }}
+                    </div>
+                {% endif %}
+                </div>
+            {% endif %}
         </div>
 
-    <hr>
+        <hr>
 
-    <div class="section" style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px;">
-        <h3>🚨 피해 사례 제보하기</h3>
-        <p style="font-size: 0.9em; color: #666;">허위 제보 방지를 위해 관리자 승인 후 등록됩니다.</p>
-        <form method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="action_type" value="report">
-            <input type="text" name="fraud_info" placeholder="사기꾼 번호 또는 계좌" required><br>
-            <select name="fraud_type" style="padding: 10px; width: 75%; margin-bottom: 10px;">
-                <option value="중고거래">중고거래 사기</option>
-                <option value="보이스피싱">보이스피싱</option>
-                <option value="기타">기타</option>
-            </select><br>
-            <textarea name="description" placeholder="상세 피해 내용 (선택사항)" style="width: 70%; height: 80px; padding: 10px;"></textarea><br>
-            <button type="submit" style="background-color: #28a745;">제보 등록</button>
-        </form>
+        <div class="box">
+            <h3>🚨 피해 사례 제보하기</h3>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="action_type" value="report">
+                <input type="text" name="fraud_info" placeholder="사기꾼 번호 또는 계좌" required>
+                <select name="fraud_type">
+                    <option value="중고거래">중고거래 사기</option>
+                    <option value="보이스피싱">보이스피싱</option>
+                    <option value="메신저피싱">메신저피싱</option>
+                    <option value="기타">기타</option>
+                </select>
+                <textarea name="description" placeholder="상세 피해 내용을 적어주세요"></textarea>
+                <button type="submit" class="btn-report">제보 등록하기</button>
+            </form>
+        </div>
     </div>
-</div>
+</body>
+</html>
