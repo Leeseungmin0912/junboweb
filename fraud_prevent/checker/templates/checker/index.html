@@ -1,38 +1,36 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>사기 방지 플랫폼 - Checker</title>
-    <style>
-        body { font-family: sans-serif; text-align: center; padding-top: 50px; background-color: #f4f4f9; }
-        .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        input { padding: 10px; width: 70%; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; }
-        button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        .result { margin-top: 20px; padding: 15px; border-radius: 5px; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>🛡️ 사기 피해 방지 조회</h1>
+{% if message %}
+    <script>alert("{{ message }}");</script>
+{% endif %}
+
+<div class="container">
+    <h1>🛡️ 사기 피해 방지 플랫폼</h1>
+    
+    <div class="section">
+        <h3>🔍 피해 사례 조회</h3>
         <form method="POST">
             {% csrf_token %}
-            <input type="text" name="search_query" value="{{ query|default:'' }}" placeholder="번호 또는 계좌 입력...">
+            <input type="hidden" name="action_type" value="search">
+            <input type="text" name="search_query" value="{{ query|default:'' }}" placeholder="조회할 번호/계좌 입력...">
             <button type="submit">조회하기</button>
         </form>
+        </div>
 
-        {% if search_result %}
-            <div class="result">
-                {% if search_result == "no_result" %}
-                    <p style="color: blue; font-weight: bold;">✅ 조회 결과: 등록된 피해 사례가 없습니다.</p>
-                {% else %}
-                    <div style="background-color: #ffebee; border: 1px solid #ffcdd2; padding: 10px;">
-                        <p style="color: red; font-weight: bold;">⚠️ 주의! 피해 사례가 존재합니다.</p>
-                        <p>유형: {{ search_result.fraud_type }}</p>
-                        <p>내용: {{ search_result.description }}</p>
-                    </div>
-                {% endif %}
-            </div>
-        {% endif %}
+    <hr>
+
+    <div class="section" style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px;">
+        <h3>🚨 피해 사례 제보하기</h3>
+        <p style="font-size: 0.9em; color: #666;">허위 제보 방지를 위해 관리자 승인 후 등록됩니다.</p>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="action_type" value="report">
+            <input type="text" name="fraud_info" placeholder="사기꾼 번호 또는 계좌" required><br>
+            <select name="fraud_type" style="padding: 10px; width: 75%; margin-bottom: 10px;">
+                <option value="중고거래">중고거래 사기</option>
+                <option value="보이스피싱">보이스피싱</option>
+                <option value="기타">기타</option>
+            </select><br>
+            <textarea name="description" placeholder="상세 피해 내용 (선택사항)" style="width: 70%; height: 80px; padding: 10px;"></textarea><br>
+            <button type="submit" style="background-color: #28a745;">제보 등록</button>
+        </form>
     </div>
-</body>
-</html>
+</div>
