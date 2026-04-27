@@ -22,11 +22,7 @@ SECRET_KEY = 'django-insecure-px+pca#62j1gwlo1b8f1b!ipu3#n$-$09e!iq6r=g!b8+)$#9r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = [
-    'junboweb.onrender.com',
-    '127.0.0.1',
-    'localhost',
-]
+ALLOWED_HOSTS = ['*']
 
 # Render 도메인을 신뢰할 수 있는 요청지로 등록
 CSRF_TRUSTED_ORIGINS = [
