@@ -134,3 +134,6 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # 2. 폼 전송을 허용할 VIP 주소 (여기에 질문자님의 사이트 주소를 넣습니다)
 CSRF_TRUSTED_ORIGINS = ['https://junboweb.onrender.com']
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
