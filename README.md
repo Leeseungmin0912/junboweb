@@ -13,6 +13,7 @@
 무분별한 허위 제보를 방지하기 위해 **관리자 승인 시스템**을 도입하여 데이터의 신뢰성과 무결성을 확보한 것이 특징입니다.
 
 - **실시간 서비스 주소:** [https://junboweb.onrender.com](https://junboweb.onrender.com)
+(웹서버 활동이 없을 시 로딩이 오래 걸릴 수 있음 )
 
 ## 🛠️ 기술 스택 (Tech Stack)
 - **Backend:** `Python`, `Django`
