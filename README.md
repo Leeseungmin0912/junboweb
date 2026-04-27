@@ -16,7 +16,7 @@
 
 ## 🛠️ 기술 스택 (Tech Stack)
 - **Backend:** `Python`, `Django`
-- **Frontend:** `HTML5`, `CSS3`
+- **Frontend:** `HTML`, `CSS`
 - **Database:** `PostgreSQL` (배포 환경), `SQLite` (로컬 환경)
 - **Deployment:** `Render` (PaaS), `GitHub`
 
